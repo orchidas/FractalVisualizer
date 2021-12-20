@@ -7,5 +7,7 @@
 <p> Some of these sets are visually beautiful </p>
 
 <center>
-![](demo/fractals.mov)
+<video width="320" height="240" controls>
+  <source src="demo/fractals.mov" type="video/mp4">
+</video>
 </center>
