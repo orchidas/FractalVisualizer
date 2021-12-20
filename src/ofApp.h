@@ -35,9 +35,10 @@ private:
     
     float** distance;
     int num_c;
+    //float threshold = 0.9;
     float threshold = 2e-1;
     vector < int > path;
-    ofxThreadedImageLoader loader;
+    //ofxThreadedImageLoader loader;
     vector<ofImage> images;
     int speedDivisor = 10;
    
@@ -61,7 +62,6 @@ private:
     // spectral flux between 2 buffers
     float spectralFlux;
     float prevSpectralFlux = 0.0;
-    float thresholdFlux = sqrt(2);
     float maxValue = 0.0;
     
    bool finishedDrawing = true;

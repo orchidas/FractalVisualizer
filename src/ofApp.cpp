@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
+    ofSetWindowShape(1920, 1080);
+    ofSetWindowPosition(10,10);
+    
     //threaded image loader is faster
     ofSetVerticalSync(true);
     soundStream.printDeviceList();
@@ -20,33 +24,37 @@ void ofApp::setup(){
     }
     
     num_c = real_c.size();
-    distance = new float* [num_c];
-    
+    distance = new float* [num_c];    
     
     //now read image similarities between each pair
     /*ofBuffer buffer2 = ofBufferFromFile("julia_image_similarities.txt");
     
     int k = 0, l = 0;
     for(auto line : buffer2.getLines()){
+        
+        if (k >= num_c)
+            break;
+        
+        
         distance[k] = new float[num_c];
+        
         auto split = ofSplitString(line, "\t");
-        
-        //ignore incomplete rows
-        if (split.size() < num_c)
-            continue;
-        
+
         l = 0;
+        //cout << split.size() << endl;
         for (auto str : split){
             
             //ssim is 1 if images are similar, so 1-ssim is the right
             //measure of distance
+            if (l >= num_c)
+                break;
             
             distance[k][l] = 1.0-ofToFloat(str);
-            cout << str << "," << distance[k][l] << "\t";
+            //cout << str << "," << distance[k][l] << "\t";
             l++;
         }
         k++;
-        cout << "\n";
+       // cout << "\n";
     }*/
     
     
@@ -107,9 +115,8 @@ void ofApp::setup(){
     images.resize(num_c);
     for(int i = 1; i <= num_c; i++){
         
-        //loader.loadFromDisk(images[i-1], path + ofToString(i) + ".png");
         images[i-1].load(path + ofToString(i) + ".png");
-        images[i-1].crop(150,120,874,800);
+        images[i-1].crop(150,120,874,780);
     }
     
     //setup audio
@@ -117,7 +124,6 @@ void ofApp::setup(){
     rightCur.assign(bufferSize, 0.0);
     
     ofSoundStreamSettings settings;
-    // or by name
     auto devices = soundStream.getMatchingDevices("default");
     if(!devices.empty()){
         settings.setInDevice(devices[1]);
@@ -171,10 +177,10 @@ void ofApp::update(){
     
     
     // if there is a significant change in flux
-    if (abs(prevSpectralFlux - spectralFlux) >= thresholdFlux && finishedDrawing){
+    if (abs(prevSpectralFlux - spectralFlux) >= sqrt(2) * prevSpectralFlux && finishedDrawing){
         
         start_c = end_c;
-        end_c = (int)ofMap(spectralFlux, 0 , 5.0, 0, num_c);
+        end_c = (int)ofMap(spectralFlux, 0 , 4.0, 0, num_c);
         //cout << start_c << "," << end_c << endl;
         path = G.djikstraSearch(start_c, end_c);
     }
@@ -203,7 +209,7 @@ void ofApp::draw(){
     
     if(ofGetFrameNum() % speedDivisor != 0)
     {
-        images[path.at(counter)].draw(0,0,874,854);
+        images[path.at(counter)].draw(500,100,800,780);
     }
     //draw code here
     else{
@@ -284,6 +290,8 @@ void ofApp::audioIn(ofSoundBuffer &input){
 }
 
 void ofApp::releaseResources(){
+    delete [] fftDataCur;
+    delete [] fftDataPrev;
     for(int i = 0; i < num_c; i++)
         delete [] distance[i];
 }
