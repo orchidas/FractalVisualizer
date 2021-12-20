@@ -1,1 +1,3 @@
 *.xcodeproj
+demo/
+.DS_Store
