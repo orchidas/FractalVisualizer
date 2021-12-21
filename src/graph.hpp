@@ -39,5 +39,7 @@ public:
     void addEdge(int startID, int endID, float weight);
     void getNeighbours(int vertexID);
     std::vector <int> djikstraSearch(int sourceID, int targetID);
+    void releaseResources();
+   
 
 };

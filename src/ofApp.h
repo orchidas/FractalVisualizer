@@ -23,7 +23,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-        void releaseResources();
+        void exit();
         void audioIn(ofSoundBuffer & input);
 
 		
@@ -38,11 +38,11 @@ private:
     //float threshold = 0.9;
     float threshold = 2e-1;
     vector < int > path;
+   
     //ofxThreadedImageLoader loader;
     vector<ofImage> images;
-    int speedDivisor = 10;
+    int speedDivisor = 15;
    
-    
     int start_c = 0;
     int end_c = 0;
     int counter = 0;
@@ -60,10 +60,10 @@ private:
     float* fftDataPrev;
     
     // spectral flux between 2 buffers
-    float spectralFlux;
+    float spectralFlux = 0.0;
     float prevSpectralFlux = 0.0;
     float maxValue = 0.0;
     
-   bool finishedDrawing = true;
+    bool finishedDrawing = true;
     
 };

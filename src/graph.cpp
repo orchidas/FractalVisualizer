@@ -133,3 +133,11 @@ std::vector <int> Graph::djikstraSearch(int sourceID, int targetID){
     return S;
 
 }
+
+void Graph::releaseResources(){
+    delete [] vertexNeighbors;
+    for(int i = 0; i < numVertices; i++){
+        delete [] adjacencyMat[i] ;
+        delete [] weightMat[i];
+    }
+}

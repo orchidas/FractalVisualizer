@@ -3,8 +3,12 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetWindowShape(1920, 1080);
-    ofSetWindowPosition(10,10);
+    //for projector
+    //ofSetWindowShape(1920,1024);
+    //ofSetWindowPosition(10,10);
+    
+    // for laptop
+    ofSetWindowShape(750,750);
     
     //threaded image loader is faster
     ofSetVerticalSync(true);
@@ -13,7 +17,7 @@ void ofApp::setup(){
     //read numbers into buffer
     ofBuffer buffer = ofBufferFromFile("mandelbrot_boundary.txt");
     
-    //read the poinTs of the mandelbrot set into vector of complex numbers
+    //read the points of the mandelbrot set into vector of complex numbers
    
     for (auto line : buffer.getLines()){
         auto split = ofSplitString(line, "\t");
@@ -159,7 +163,7 @@ void ofApp::update(){
     
     
     //normalize FFT spectra
-    maxValue = 0;
+    maxValue = 0.0;
     for(int i = 0; i< fft->getBinSize(); i++){
         if(abs(fftDataCur[i]) > maxValue)
             maxValue = fftDataCur[i];
@@ -209,7 +213,8 @@ void ofApp::draw(){
     
     if(ofGetFrameNum() % speedDivisor != 0)
     {
-        images[path.at(counter)].draw(500,100,800,780);
+        //images[path.at(counter)].draw(500,120,800,780);
+        images[path.at(counter)].draw(0,0,874,780);
     }
     //draw code here
     else{
@@ -289,9 +294,10 @@ void ofApp::audioIn(ofSoundBuffer &input){
        }
 }
 
-void ofApp::releaseResources(){
+void ofApp::exit(){
     delete [] fftDataCur;
     delete [] fftDataPrev;
     for(int i = 0; i < num_c; i++)
         delete [] distance[i];
+    G.releaseResources();
 }
